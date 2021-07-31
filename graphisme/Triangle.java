@@ -1,7 +1,9 @@
-package com.example.f1;
+package com.example.f1.graphisme;
 
 import android.opengl.GLES20;
 import android.util.Log;
+
+import com.example.f1.MyGLRenderer;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -45,16 +47,20 @@ public class Triangle {
 
     //number of coordinate per vertex in this array
     static final int COORDS_PER_VERTEX = 3;
-    static float triangleCoords[] = {
-            0.0f, 0.62f, 0.0f,//top
-            -0.5f, -0.3f, 0.0f,//bottom left
-            0.5f, -0.3f, 0.0f//bottom right
-    };
+    static float triangleCoords[]=new float[9];
 
     //set color with red green blue and alpha values
-    float color[] = {0.64f, 0.76f, 0.23f, 0.8f};
+    float color[] = new float[4];
 
-    public Triangle() {
+    public Triangle(float x1, float y1, float x2, float y2, float x3, float y3, int c1, int c2, int c3) {
+        triangleCoords= new float[]{
+                x1, y1, 0f,//top
+                x2, y2, 0f,//bottom left
+                x3, y3, 0f//bottom right
+        };
+
+        color = new float[]{(float)c1/255.0f, (float)c2/255.0f, (float)c3/255.0f, 1.0f};
+
         //initialize vertex byte buffer for shape coordinate
         ByteBuffer bb = ByteBuffer.allocateDirect(
                 //number of coordinate values * 4 bytes per float
@@ -124,6 +130,12 @@ public class Triangle {
 
         //Disable vertex array
         GLES20.glDisableVertexAttribArray(positionHandle);
+    }
+
+    public void setColor(int r, int g, int b){
+        color[0]=(float)(r/255.0f);
+        color[1]=(float)(g/255.0f);
+        color[2]=(float)(b/255.0f);
     }
 
 }

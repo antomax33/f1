@@ -15,20 +15,26 @@ import static android.opengl.GLES20.glGetShaderiv;
 
 public class MyGLRenderer implements GLSurfaceView.Renderer {
 
-    private Triangle mTriangle;
-    private final float[] vPMatrix = new float[16];
+    /*private Triangle vehicule;
+    private Square sol, sol2;*/
+    private long oldTime=0;
+    private final static float zoom = 0.4f;
     private final float[] porjectionMatrix = new float[16];
     private final float[] viewMatrix = new float[16];
-    private final float[] rotationMatrix = new float[16];
+    private Game game;
 
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
         //Set the background frame color
         GLES20.glClearColor(119f/255f, 181f/255f, 254f/255, 1.0f);
 
-        // initialize a triangle
-        mTriangle = new Triangle();
+        game = new Game();
 
+        // initialize a triangle
+        /*vehicule = new Triangle(0.2f, 0f, 0.5f, 0.8f, 0.8f, 0f, 128, 23, 37);
+
+        sol = new Square(0, 0, 2, 1, 128, 128, 128);
+        sol2 = new Square(2, 0, 1, 1, 128, 128, 128);*/
     }
 
     @Override
@@ -45,30 +51,20 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 gl10) {
 
-        float[] scratch = new float[16];
+        float[] mBase = new float[16];
+
 
         //Redraw background color
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
         //Set the camera position (View matrix)
-        Matrix.setLookAtM(viewMatrix, 0, 0,0, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        Matrix.setLookAtM(viewMatrix, 0, 0,0, 3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        Matrix.scaleM(viewMatrix,0, zoom, zoom, zoom);
 
-        Matrix.multiplyMM(vPMatrix, 0, porjectionMatrix, 0, viewMatrix, 0);
-
-        //Create a rotation transformation for the triangle
-        long time = SystemClock.uptimeMillis() % 4000L;
-        float angle = 0.090f * ((int)time);
-        Matrix.setRotateM(rotationMatrix, 0, angle, 0, 0, -1.0f);
+        Matrix.multiplyMM(mBase, 0, porjectionMatrix, 0, viewMatrix, 0);
 
 
-        Matrix.multiplyMM(scratch, 0, vPMatrix, 0, rotationMatrix, 0);
-
-
-
-        mTriangle.draw(scratch);//vPMatrix si marche pas
-
-
-
+        game.draw(mBase);
     }
 
 
@@ -100,6 +96,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     public void setAngle(float angle){
         mAngle=angle;
+    }
+
+    public Game getGame(){
+        return game;
     }
 }
 
