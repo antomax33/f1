@@ -13,12 +13,12 @@ import android.view.WindowManager;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 public class MyGLSurfaceView extends GLSurfaceView {
-    public final float separtationBoutton = 0.4f;
-    public final float separtationBouttonGD = 0.8f;
+    public final float separtationBouttonA = 0.16f;
+    public final float separtationBouttonB = 0.32f;
+    public final float separtationBouttonC = 0.48f;
+    public final float separtationBouttonD = 0.70f;
+    public final float separtationBouttonE = 0.85f;
     private final MyGLRenderer renderer;
-    private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
-    private float previousX;
-    private float previousY;
     private Game game;
 
     private int width;
@@ -47,31 +47,44 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
+        //Log.i("Triangle moa", "Triangle moa on TouchEvent debut");
         float touchX = (float)(e.getX()/width);
         float touchY = (float)(e.getY()/height);
+        game = renderer.getGame();//besoin de l'initialiser a chaque fois sinon crash
         if(e.getAction()==MotionEvent.ACTION_DOWN){
             Log.i("Triangle moa", "Triangle moa on TouchEvent down (" + touchX + ";" + touchY);
-            game = renderer.getGame();
             //game.buttonTouch(touchX, touchY);
-            if(touchX<separtationBouttonGD){
-                game.avancerCommencer();
+            if(touchX<separtationBouttonA){
+                // btn couleur 1
+                game.bouttonCouleur(1);
+            }else if(touchX<separtationBouttonB){
+                //btn couleur 2
+                game.bouttonCouleur(2);
+            }else if(touchX<separtationBouttonC){
+                //btn couleur 3
+                game.bouttonCouleur(3);
+            }else if(touchX<separtationBouttonD){
+                //espace
+            }else if(touchX<separtationBouttonE){
+                //btn gauche
+                game.bouttonGauche();
             }else{
-                game.reculerCommencer();
+                //btn droite
+                game.bouttonDroite();
             }
         }else if(e.getAction()==MotionEvent.ACTION_UP){
             Log.i("Triangle moa", "Triangle moa action up");
-            game.arreterDeplacement();
-        }else{
-            game.continuerDeplacement();
+            game.bouttonLache();
         }
 
-       if(touchX<separtationBoutton){
+       if(touchX<separtationBouttonC){
            //juste click, pas besoin de action down
            return false;
        }else {
            //pas juste click, besoin de action down
            return true;
        }
+        //return false;
     }
 
 
