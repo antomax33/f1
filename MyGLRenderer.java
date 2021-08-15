@@ -18,8 +18,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     /*private Triangle vehicule;
     private Square sol, sol2;*/
     private long oldTime=0;
-    private final static float zoom = 0.4f;
-    private final float[] porjectionMatrix = new float[16];
+    private final static float zoom = 0.1f;
+    private final float[] projectionMatrix = new float[16];
     private final float[] viewMatrix = new float[16];
     private Game game;
 
@@ -30,11 +30,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         game = new Game();
 
-        // initialize a triangle
-        /*vehicule = new Triangle(0.2f, 0f, 0.5f, 0.8f, 0.8f, 0f, 128, 23, 37);
 
-        sol = new Square(0, 0, 2, 1, 128, 128, 128);
-        sol2 = new Square(2, 0, 1, 1, 128, 128, 128);*/
     }
 
     @Override
@@ -45,7 +41,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         //this projection matrix is applied to object coordinates
         //in th onDrawFrame() method
-        Matrix.frustumM(porjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
+        Matrix.frustumM(projectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
     }
 
     @Override
@@ -59,9 +55,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         //Set the camera position (View matrix)
         Matrix.setLookAtM(viewMatrix, 0, 0,0, 3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
-        Matrix.scaleM(viewMatrix,0, zoom, zoom, zoom);
 
-        Matrix.multiplyMM(mBase, 0, porjectionMatrix, 0, viewMatrix, 0);
+        Matrix.multiplyMM(mBase, 0, projectionMatrix, 0, viewMatrix, 0);
 
 
         game.draw(mBase);
@@ -86,16 +81,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         }
 
         return shader;
-    }
-
-    public volatile float mAngle;
-
-    public float getAngle(){
-        return mAngle;
-    }
-
-    public void setAngle(float angle){
-        mAngle=angle;
     }
 
     public Game getGame(){

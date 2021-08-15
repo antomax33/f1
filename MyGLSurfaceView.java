@@ -2,6 +2,10 @@ package com.example.f1;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -13,17 +17,22 @@ import android.view.WindowManager;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 public class MyGLSurfaceView extends GLSurfaceView {
-    public final float separtationBouttonA = 0.16f;
-    public final float separtationBouttonB = 0.32f;
-    public final float separtationBouttonC = 0.48f;
-    public final float separtationBouttonD = 0.70f;
-    public final float separtationBouttonE = 0.85f;
+    public final float SENSIBILITE = 16f;
+
+    public final static float SEPARTATIONBOUTTONA = 0.16f;
+    public final static float SEPARTATIONBOUTTONB = 0.32f;
+    public final static float SEPARTATIONBOUTTONC = 0.48f;
+    public final static float SEPARTATIONBOUTTOND = 0.70f;
+    public final static float SEPARTATIONBOUTTONE = 0.85f;
     private final MyGLRenderer renderer;
     private Game game;
 
     private int width;
     private int height;
 
+    //sensor
+    SensorManager sm;
+    Sensor sensor;
 
 
     public MyGLSurfaceView(Context context) {
@@ -43,6 +52,12 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
         //set the Renderer for drawing on the GLSurfaceView
         setRenderer(renderer);
+
+        sm = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        sensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        //setRequestedOrientation "Landsacpe"
+
     }
 
     @Override
@@ -54,30 +69,29 @@ public class MyGLSurfaceView extends GLSurfaceView {
         if(e.getAction()==MotionEvent.ACTION_DOWN){
             Log.i("Triangle moa", "Triangle moa on TouchEvent down (" + touchX + ";" + touchY);
             //game.buttonTouch(touchX, touchY);
-            if(touchX<separtationBouttonA){
+            if(touchX<SEPARTATIONBOUTTONA){
                 // btn couleur 1
-                game.bouttonCouleur(1);
-            }else if(touchX<separtationBouttonB){
+            }else if(touchX<SEPARTATIONBOUTTONB){
                 //btn couleur 2
-                game.bouttonCouleur(2);
-            }else if(touchX<separtationBouttonC){
+            }else if(touchX<SEPARTATIONBOUTTONC){
                 //btn couleur 3
-                game.bouttonCouleur(3);
-            }else if(touchX<separtationBouttonD){
-                //espace
-            }else if(touchX<separtationBouttonE){
-                //btn gauche
-                game.bouttonGauche();
+            }else if(touchX<SEPARTATIONBOUTTOND){
+                //btn gauche reculer
+                game.setPersonnageAcceleration(-1);
+            }else if(touchX<SEPARTATIONBOUTTONE){
+                //btn milieu avancer
+                game.setPersonnageAcceleration(1);
             }else{
-                //btn droite
-                game.bouttonDroite();
+                //btn droite accelerer
+                game.setPersonnageAcceleration(2);
             }
         }else if(e.getAction()==MotionEvent.ACTION_UP){
             Log.i("Triangle moa", "Triangle moa action up");
-            game.bouttonLache();
+            //relacher gas
+            game.setPersonnageAcceleration(0);
         }
 
-       if(touchX<separtationBouttonC){
+       if(touchX<SEPARTATIONBOUTTONC){
            //juste click, pas besoin de action down
            return false;
        }else {
@@ -88,5 +102,37 @@ public class MyGLSurfaceView extends GLSurfaceView {
     }
 
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        sm.registerListener(gyroListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        sm.unregisterListener(gyroListener);
+    }
+
+    public SensorEventListener gyroListener = new SensorEventListener() {
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int i) {
+        }
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            //float x = event.values[0]*SENSIBILITE;
+            float y = event.values[1]*SENSIBILITE;
+            //float z = -event.values[2]*SENSIBILITE;
+
+            //Log.i("Triangle moa", "Triangle moa sensor (" + x + ";" + y + ";" + z + ")");
+            game = renderer.getGame();
+            if(game!=null){
+                game.setPersonnageRotation(y);
+
+            }
+        }
+
+    };
 
 }

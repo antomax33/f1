@@ -9,8 +9,8 @@ public class Square {
         triangle2 = new Triangle(x1, y1, x3, y3, x4, y4, r, g, b);
     }
 
-    public Square(int x, int y, int width, int height, int r, int g, int b){
-        this(x, y, x, y-height, x+width, y-height, x+width, y, r, g, b);
+    public Square(float x, float y, float width, float height, int r, int g, int b){
+        this(x, y, x, y+height, x+width, y+height, x+width, y, r, g, b);
     }
 
     public Square(int x, int y, int color){
