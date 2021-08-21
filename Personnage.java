@@ -9,15 +9,11 @@ public class Personnage extends Object{
     public final float VITESSEFREINAGE = ACCELERATION*0.2f;
     public final float ACCELERATIONBOOST = ACCELERATION*7f;
 
-    public final float VITESSEMINIMALAUCARRE = 0.002f;
     public final float VITESSEMAXIMAL= 10f;
     public final float ACCELERATIONGRAVITE = -9.81f;
     public final float DECALAGEDROITE = 1f;
     public final float DECALAGEGAUCHE = 0f;
     public final float DECALAGEHAUT = 1f;
-    public final float BORDDEMAPX = 7f;
-    public final float BORDDEMAPY = 11.5f;
-    public final float COEFFICIENTREBOND = 0.2f;
     public final float COEFFICIENTPNEU = 0.9f;
 
     private Triangle triangle;
@@ -25,11 +21,9 @@ public class Personnage extends Object{
     private float angleActuel=0;
 
     private int accelerer=0;// -1 arret, 0 rien, 1 avancer, 2 boost
-    private long timeLastUpdate=0;
-    private Game game;
 
-    public Personnage(){
-        super(0,-3);
+    public Personnage(Game game){
+        super(0,-3, game);
         triangle = new Triangle(-0.5f, -0.5f, 0f, 0.5f, 0.5f, -0.5f, 128, 23, 37);
     }
 
@@ -148,25 +142,25 @@ public class Personnage extends Object{
         }
 
         //vitesse min
-        if(Math.pow(vitesseXf,2) + Math.pow(vitesseYf,2)<VITESSEMINIMALAUCARRE){
+        if(Math.pow(vitesseXf,2) + Math.pow(vitesseYf,2)<game.VITESSEMINIMALAUCARRE){
             vitesseXf=0;
             vitesseYf=0;
         }
 
         //positionX
-        if(positionX>BORDDEMAPX){
-            positionX=BORDDEMAPX;
-            vitesseXf*=-COEFFICIENTREBOND;
-        }else if(positionX<-BORDDEMAPX){
-            positionX=-BORDDEMAPX;
-            vitesseXf*=-COEFFICIENTREBOND;
+        if(positionX>game.BORDDEMAPX){
+            positionX=game.BORDDEMAPX;
+            vitesseXf*=-game.COEFFICIENTREBOND;
+        }else if(positionX<-game.BORDDEMAPX){
+            positionX=-game.BORDDEMAPX;
+            vitesseXf*=-game.COEFFICIENTREBOND;
         }
         //positionY
-        if(positionY>BORDDEMAPY){
-            positionY=BORDDEMAPY;
-            vitesseYf*=-COEFFICIENTREBOND;
-        }else if(positionY<-BORDDEMAPY){
-            positionY=-BORDDEMAPY;
+        if(positionY>game.BORDDEMAPY){
+            positionY=game.BORDDEMAPY;
+            vitesseYf*=-game.COEFFICIENTREBOND;
+        }else if(positionY<-game.BORDDEMAPY){
+            positionY=-game.BORDDEMAPY;
             vitesseYf=0;
         }
 

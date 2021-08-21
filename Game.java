@@ -5,16 +5,20 @@ import android.opengl.Matrix;
 import com.example.f1.graphisme.ui;
 
 public class Game {
-    public final static float ZOOM = 0.3f;
+    public final static float ZOOM = 1f;
     public Personnage personnage;
     Decors decors;
     ui ui;
     Balle balle;
+    public final float BORDDEMAPX = 7f;
+    public final float BORDDEMAPY = 11.5f;
+    public final float VITESSEMINIMALAUCARRE = 0.002f;
+    public final float COEFFICIENTREBOND = 0.5f;
 
     public Game(){
-        personnage = new Personnage();
+        personnage = new Personnage(this);
         decors = new Decors();
-        balle = new Balle();
+        balle = new Balle(this);
 
         ui = new ui();
     }
@@ -48,6 +52,7 @@ public class Game {
 
     void physique(){
         personnage.physique(balle);
+        balle.physique();
     }
 
     public void setPersonnageAcceleration(int a){

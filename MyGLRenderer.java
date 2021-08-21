@@ -18,7 +18,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     /*private Triangle vehicule;
     private Square sol, sol2;*/
     private long oldTime=0;
-    private final static float zoom = 0.1f;
     private final float[] projectionMatrix = new float[16];
     private final float[] viewMatrix = new float[16];
     private Game game;
@@ -41,7 +40,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         //this projection matrix is applied to object coordinates
         //in th onDrawFrame() method
-        Matrix.frustumM(projectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
+        Matrix.frustumM(projectionMatrix, 0, -ratio, ratio, -2, 1, 1, 12);
     }
 
     @Override
@@ -54,7 +53,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
         //Set the camera position (View matrix)
-        Matrix.setLookAtM(viewMatrix, 0, 0,0, 3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+        Matrix.setLookAtM(viewMatrix, 0, 0,-1, 3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
         Matrix.multiplyMM(mBase, 0, projectionMatrix, 0, viewMatrix, 0);
 
