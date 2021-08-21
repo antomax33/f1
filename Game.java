@@ -9,10 +9,12 @@ public class Game {
     public Personnage personnage;
     Decors decors;
     ui ui;
+    Balle balle;
 
     public Game(){
         personnage = new Personnage();
         decors = new Decors();
+        balle = new Balle();
 
         ui = new ui();
     }
@@ -39,12 +41,13 @@ public class Game {
         //Matrix.rotateM(mDecors, 0, -20, 1, 0, 0);
         //Matrix.perspectiveM(mDecors, 0, 5f, 1.2f, 0.1f, 200f);
         decors.draw(mDecors);
+        balle.draw(mDecors);
         personnage.draw(mView);
         ui.onDraw(mScreen);
     }
 
     void physique(){
-       personnage.physique();
+        personnage.physique(balle);
     }
 
     public void setPersonnageAcceleration(int a){

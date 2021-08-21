@@ -9,8 +9,8 @@ import com.example.f1.graphisme.Square;
 
 public class Decors {
     int grey[]={0xff888888,0xffaaaaaa};
-    private final static int LONGUEUR = 8;
-    private final static int LARGEUR = 5;
+    private final static int LONGUEUR = 5;
+    private final static int LARGEUR = 8;
     private final static int AIR = LARGEUR*LONGUEUR;
 
     private final static int TAILLECARRE = 3;

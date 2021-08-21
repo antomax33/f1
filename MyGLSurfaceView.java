@@ -17,7 +17,7 @@ import android.view.WindowManager;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 public class MyGLSurfaceView extends GLSurfaceView {
-    public final float SENSIBILITE = 16f;
+    public final float SENSIBILITE = 20f;
 
     public final static float SEPARTATIONBOUTTONA = 0.16f;
     public final static float SEPARTATIONBOUTTONB = 0.32f;
